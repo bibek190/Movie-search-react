@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Card from "./Card";
+import App from "../App";
 
-const SearchForm = () => {
+const SearchForm = ({ addMovieToList }) => {
   const [form, setForm] = useState("");
   const [movie, setMovie] = useState({});
   const [isError, setError] = useState(false);
@@ -36,6 +37,13 @@ const SearchForm = () => {
     setMovie({});
   };
 
+  // handle add movie and clear
+  const handleAddMovieAndClear = (movie, type) => {
+    addMovieToList(movie, type);
+    setForm("");
+    setMovie({});
+  };
+
   return (
     <div>
       <form action="" onSubmit={handleOnSubmit}>
@@ -54,7 +62,13 @@ const SearchForm = () => {
           </div>
         </div>
       </form>
-      {movie.imdbID && <Card movie={movie} handleOnRemove={handleOnRemove} />}
+      {movie.imdbID && (
+        <Card
+          movie={movie}
+          addMovieToList={handleAddMovieAndClear}
+          handleOnRemove={handleOnRemove}
+        />
+      )}
       {isError && (
         <div class="alert alert-danger mt-4 text-center" role="alert">
           No Movie Found
